@@ -14,9 +14,11 @@ Output:
 
 Numbers are as follows:
 
-1 23 =  10
-2 13 =  12
-3 12 =  12
+[1, 23] = 2+8 = 10
+[2, 13] = 4+8 = 12
+[3, 12] = 8+4 = 12
+
+All combinations are exauhsted
 
 """
 
@@ -36,9 +38,9 @@ def generate_combinations(numbers, r):      #function to generate all possible c
     return combinations
 
 def get_combinations(n):        #function to get all possible combinations
-    numbers = list(range(1, n+1))
+    numbers = list(range(2,n+2))    #list of numbers[1 - (n+1)] to generate combinations taking value of zero into account
     all_combinations = []
-    for r in range(1, n+1):
+    for r in range(1,n+1):
         combinations = generate_combinations(numbers, r)
         all_combinations.extend(combinations)
     
@@ -58,33 +60,57 @@ all_combinations = get_combinations(n)
 
 modified_combinations = modify_combinations(all_combinations, n)
 
-sumodd,sumeven = 0,0
+l1,l2=[],[]
+for i in range(n//2 if n%2==0 else n//2+1):
+    l2.append(0)
+l1=[l2[:] for i in range(len(modified_combinations) if n%2!=0 else len(modified_combinations)//2)]  #list to store the pairs
 
 #Printing the pairs and their sum
 
-print("\nNumbers are as follows:\n\n")
+print("\nNumbers are as follows:\n")
 
 for j in range(len(modified_combinations)):
     combination = modified_combinations[j]
     if(n%2!=0):
+        c=1
         for i in range(0,n,2):      #for odd number of digits
-            sumodd+=2**combination[i]
             if i==0:
-                print(combination[i],end=" ")
+                l1[j][i]=combination[i]
                 continue
-            print((combination[i]+(combination[i-1]*10)),end=" ")
-        print(" = ",sumodd)
-        sumodd = 0
+            l1[j][c]=(combination[i]+(combination[i-1]*10))     #storing the pairs
+            c+=1
+    
     else:       #for even number of digits
         if j>=int(len(modified_combinations)/2):
             break
+        c=0
         for i in range(1,n,2):
-            sumeven+=2**combination[i]
-            print(combination[i]+(combination[i-1]*10),end=" ")
-        print(" = ",sumeven)
-        sumeven = 0
+            l1[j][c]=(combination[i]+(combination[i-1]*10))     #storing the pairs
+            c+=1
+    l1[j].sort()
+l1.sort()
 
-print("All combinations are exauhsted\n\n")
+lf=[]       #list to store the pairs
+c=0
+
+for i in range(len(l1)):        #removing duplicates
+    if l1[i][:]!=l1[i-1][:]:
+        lf.append([x-11 for x in l1[i][:]])     #reverting the list of numbers to [0-n] as it was modified to be [1-(n+1)] to generate combinations and take the value of zero into account
+        lf[c][0]+=10 if n%2!=0 else 0
+        c+=1
+
+
+for i in lf:        #printing the pairs and their sum
+    print(i,end=" = ")
+    sum=0
+    for j in range(len(i)):
+        twopower=2**i[j] if i[j]<10 else 2**(i[j]%10)       #finding the sum of 2 to the power of the second digit of the pairs
+        sum+=twopower
+        print(twopower,end="+"if j!=len(i)-1 else " = ")
+    print(sum)
+
+print("\nAll combinations are exauhsted\n\n")
+
 
 #end of code
 
