@@ -1,5 +1,5 @@
 ### Hi there 👋
-yo this is me second time editing this readme 
+Area dedicated to coding related problems. 
 <!--
 **Sh1v4mKum4r/Sh1v4mKum4r** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
